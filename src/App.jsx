@@ -61,7 +61,6 @@ const App = () => {
       <section className="hero flex align-center">
         <div className="hero-content">
           <h1 className="hero-title">Votre Marque,<br />Notre savoir faire</h1>
-          <p className="hero-subtitle">Très content du produit - Joël Boyreau Casper Dental</p>
           <div className="hero-cta">
             <button className="btn">Videocall</button>
           </div>
