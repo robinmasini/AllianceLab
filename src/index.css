@@ -36,7 +36,10 @@ ul {
   list-style: none;
 }
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
   font-weight: 700;
   line-height: 1.2;
 }
@@ -80,14 +83,150 @@ section {
 }
 
 /* Utils */
-.flex { display: flex; }
-.align-center { align-items: center; }
-.justify-between { justify-content: space-between; }
-.grid { display: grid; }
-.text-center { text-align: center; }
+.flex {
+  display: flex;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.grid {
+  display: grid;
+}
+
+.text-center {
+  text-align: center;
+}
 
 @media (max-width: 768px) {
   section {
     padding: 60px 5%;
   }
+}
+
+/* Liquid Glass & Construction Modal */
+.glass-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.01);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.liquid-glass-card {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+  border-radius: 32px;
+  padding: 60px;
+  width: 90%;
+  max-width: 450px;
+  text-align: center;
+  animation: modalFadeIn 0.6s ease-out;
+}
+
+.liquid-glass-card img {
+  height: 60px;
+  margin-bottom: 30px;
+}
+
+.liquid-glass-card h2 {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+  color: var(--secondary);
+}
+
+.liquid-glass-card p {
+  color: var(--text-muted);
+  margin-bottom: 40px;
+}
+
+.code-input-container {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 40px;
+}
+
+.code-field {
+  width: 50px;
+  height: 65px;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.6);
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--secondary);
+  transition: var(--transition);
+}
+
+.code-field:focus {
+  outline: none;
+  border-color: var(--secondary);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.05);
+}
+
+.code-field.error {
+  border-color: #ff4d4d;
+  animation: shake 0.4s ease-in-out;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shake {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-8px);
+  }
+
+  50% {
+    transform: translateX(8px);
+  }
+
+  75% {
+    transform: translateX(-8px);
+  }
+}
+
+.unlock-msg {
+  color: #28a745;
+  font-weight: 600;
+  margin-top: 20px;
+  animation: fadeIn 0.3s ease;
+}
+
+.app-content-blur {
+  filter: blur(15px);
+  pointer-events: none;
 }
