@@ -1,0 +1,409 @@
+import React, { useState } from 'react';
+import './index.css';
+import { supabase } from './lib/supabase';
+
+const App = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [formStatus, setFormStatus] = useState({ loading: false, success: false, error: null });
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+
+  const handleContactSubmit = async (e) => {
+    e.preventDefault();
+    setFormStatus({ loading: true, success: false, error: null });
+
+    try {
+      const { error } = await supabase
+        .from('contacts')
+        .insert([formData]);
+
+      if (error) throw error;
+
+      setFormStatus({ loading: false, success: true, error: null });
+      setFormData({ name: '', email: '', message: '' });
+
+      setTimeout(() => setFormStatus(prev => ({ ...prev, success: false })), 5000);
+    } catch (err) {
+      console.error('Error submitting form:', err);
+      setFormStatus({ loading: false, success: false, error: 'Une erreur est survenue. Veuillez réessayer.' });
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  return (
+    <div className="app">
+      {/* ... header remains same ... */}
+      <header className="header flex align-center justify-between">
+        <div className="logo">
+          <img src="/assets/logo.png" alt="AllianceLab Logo" />
+        </div>
+
+        <nav className={`nav ${isMenuOpen ? 'open' : ''}`}>
+          <ul className="flex">
+            <li><a href="#about" onClick={() => setIsMenuOpen(false)}>À propos</a></li>
+            <li><a href="#aligners" onClick={() => setIsMenuOpen(false)}>Nos aligners</a></li>
+            <li><a href="#production" onClick={() => setIsMenuOpen(false)}>Production</a></li>
+            <li><a href="#automatisation" onClick={() => setIsMenuOpen(false)}>Automatisation</a></li>
+            <li><a href="#community" onClick={() => setIsMenuOpen(false)}>Communauté</a></li>
+            <li><a href="#contact" onClick={() => setIsMenuOpen(false)}>Contact</a></li>
+          </ul>
+        </nav>
+
+        <div className="menu-toggle" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          <span className={isMenuOpen ? 'close' : ''}></span>
+        </div>
+      </header>
+
+      {/* ... hero remains same ... */}
+      <section className="hero flex align-center">
+        <div className="hero-content">
+          <h1 className="hero-title">Votre Marque,<br />Notre savoir faire</h1>
+          <p className="hero-subtitle">Très content du produit - Joël Boyreau Casper Dental</p>
+          <div className="hero-cta">
+            <button className="btn">Videocall</button>
+          </div>
+        </div>
+        <div className="hero-image">
+          <div className="floating-img">
+            <img src="/assets/hero-bg.png" alt="Hero Lab" />
+          </div>
+        </div>
+      </section>
+
+      {/* ... about remains same ... */}
+      <section id="about" className="about grid">
+        <div className="about-text">
+          <h2>À propos de nous</h2>
+          <p>AllianceLab est à la pointe de l'innovation dentaire. Notre mission est d'allier expertise artisanale et technologies de pointe pour offrir des solutions d'alignement dentaire d'une précision inégalée.</p>
+          <p>Nous croyons en une automatisation intelligente qui sert le talent de nos prothésistes, permettant une production fluide et des résultats constants.</p>
+        </div>
+        <div className="about-image">
+          <img src="/assets/renaud.png" alt="Renaud - Expert Lab" />
+          <span className="caption">Renaud - Expert Laboratoire</span>
+        </div>
+      </section>
+
+      {/* Services Section */}
+      <section id="aligners" className="services-section bg-light">
+        <div className="container">
+          <div className="section-header">
+            <h2>Nos Aligners</h2>
+            <p>Une technologie invisible pour un sourire parfait.</p>
+          </div>
+          <div className="service-grid grid">
+            <div className="service-item">
+              <img src="/assets/aligner.png" alt="Aligner" />
+            </div>
+            <div className="service-text">
+              <h3>Précision & Discrétion</h3>
+              <p>Nos aligners sont conçus sur mesure à l'aide de scans 3D haute résolution. Chaque étape de la fabrication est contrôlée pour assurer un confort optimal au patient et une efficacité clinique maximale.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Production Section */}
+      <section id="production" className="services-section">
+        <div className="container">
+          <div className="section-header">
+            <h2>Production</h2>
+          </div>
+          <div className="production-layout grid">
+            <div className="production-image">
+              <img src="/assets/production.png" alt="Production Lab" />
+              <div className="slider-dots flex">
+                <span className="dot active"></span>
+                <span className="dot"></span>
+                <span className="dot"></span>
+              </div>
+            </div>
+            <div className="production-text">
+              <p>Notre centre de production utilise les dernières machines de fraisage et d'impression 3D pour garantir une fidélité absolue à la prescription du dentiste.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Automatisation Section */}
+      <section id="automatisation" className="services-section bg-light">
+        <div className="container">
+          <div className="section-header">
+            <h2>Automatisation</h2>
+          </div>
+          <div className="auto-grid grid">
+            <div className="auto-card">
+              <img src="/assets/automatisation.png" alt="Automatisation" />
+              <div className="overlay-text">Dentiste</div>
+            </div>
+            <div className="auto-card">
+              <div className="card-placeholder">
+                <p>Intégration fluide entre le cabinet dentaire et notre laboratoire.</p>
+              </div>
+              <div className="overlay-text">Patient</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Community Section */}
+      <section id="community" className="community">
+        <div className="container">
+          <h2 className="text-center">Communauté</h2>
+          <div className="community-grid grid">
+            <div className="community-item">
+              <div className="circle-img"></div>
+              <h3>Professionnels</h3>
+              <p>Rejoignez un réseau d'experts dédiés à l'excellence.</p>
+            </div>
+            <div className="community-item">
+              <div className="circle-img"></div>
+              <h3>Clients</h3>
+              <p>Des cabinets dentaires satisfaits dans toute l'Europe.</p>
+            </div>
+            <div className="community-item">
+              <div className="circle-img"></div>
+              <h3>Spécialistes</h3>
+              <p>Une expertise partagée pour des cas complexes.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section id="contact" className="contact">
+        <div className="container">
+          <h2>Contact</h2>
+          <div className="contact-layout grid">
+            <div className="locations-grid grid">
+              <div className="location">
+                <h4>Siège</h4>
+                <p>Noms: AllianceLab HQ</p>
+                <p>Adres: Aix-en-Provence, France</p>
+                <p>Email: contact@laboratoirealliance.com</p>
+              </div>
+              <div className="location">
+                <h4>NL</h4>
+                <p>Noms: NL Branch</p>
+                <p>Adres: Amsterdam, Netherlands</p>
+              </div>
+              <div className="location">
+                <h4>BE</h4>
+                <p>Noms: BE Branch</p>
+                <p>Adres: Brussels, Belgium</p>
+              </div>
+              <div className="location">
+                <h4>Tunisie</h4>
+                <p>Noms: TN Branch</p>
+                <p>Adres: Tunis, Tunisie</p>
+              </div>
+            </div>
+            <form className="contact-form" onSubmit={handleContactSubmit}>
+              <input
+                type="text"
+                name="name"
+                placeholder="Nom"
+                value={formData.name}
+                onChange={handleInputChange}
+                required
+                disabled={formStatus.loading}
+              />
+              <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={formData.email}
+                onChange={handleInputChange}
+                required
+                disabled={formStatus.loading}
+              />
+              <textarea
+                name="message"
+                placeholder="Message"
+                rows="5"
+                value={formData.message}
+                onChange={handleInputChange}
+                required
+                disabled={formStatus.loading}
+              ></textarea>
+              <button type="submit" className="btn" disabled={formStatus.loading}>
+                {formStatus.loading ? 'Envoi...' : 'Envoyer'}
+              </button>
+              {formStatus.success && <p className="success-msg">Message envoyé avec succès !</p>}
+              {formStatus.error && <p className="error-msg">{formStatus.error}</p>}
+            </form>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="footer">
+        <div className="container flex justify-between align-center">
+          <div className="footer-info">
+            <img src="/assets/logo.png" alt="Logo" style={{ height: '30px' }} />
+            <p>&copy; 2026 AllianceLab. Tous droits réservés.</p>
+          </div>
+          <div className="footer-links flex">
+            <a href="#">Politique de confidentialité</a>
+            <a href="#">Mentions légales</a>
+          </div>
+        </div>
+      </footer>
+
+      <style jsx>{`
+        /* ... existing styles ... */
+        .success-msg { color: #28a745; margin-top: 10px; font-weight: 500; }
+        .error-msg { color: #dc3545; margin-top: 10px; font-weight: 500; }
+        
+        .header {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: var(--header-height);
+          padding: 0 5%;
+          background: rgba(255, 255, 255, 0.9);
+          backdrop-filter: blur(10px);
+          z-index: 1000;
+          border-bottom: 1px solid var(--border);
+        }
+        .logo img {
+          height: 40px;
+        }
+        .nav ul {
+          gap: 30px;
+        }
+        .nav a {
+          font-size: 0.9rem;
+          font-weight: 500;
+          color: var(--text-muted);
+        }
+        .nav a:hover {
+          color: var(--secondary);
+        }
+        
+        /* Hero */
+        .hero {
+          min-height: 100vh;
+          padding-top: var(--header-height);
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 40px;
+        }
+        .hero-title {
+          font-size: 4rem;
+          margin-bottom: 20px;
+        }
+        .hero-subtitle {
+          font-size: 1.2rem;
+          color: var(--text-muted);
+          margin-bottom: 40px;
+        }
+        .hero-image {
+          position: relative;
+        }
+        .floating-img {
+          width: 100%;
+          height: 500px;
+          background: var(--bg-light);
+          border-radius: 20px;
+          overflow: hidden;
+          box-shadow: 0 30px 60px rgba(0,0,0,0.1);
+        }
+        .floating-img img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        /* About */
+        .about {
+          grid-template-columns: 1fr 1fr;
+          align-items: center;
+          gap: 80px;
+        }
+        .about img {
+          width: 100%;
+          border-radius: 10px;
+        }
+        .about h2 { font-size: 2.5rem; margin-bottom: 30px; }
+        .about-text p { margin-bottom: 20px; color: var(--text-muted); }
+        .caption { display: block; margin-top: 10px; font-size: 0.8rem; color: var(--text-muted); text-align: right; }
+
+        /* Services */
+        .services-section h2 { font-size: 2.5rem; margin-bottom: 40px; }
+        .section-header { margin-bottom: 60px; }
+        .section-header p { color: var(--text-muted); font-size: 1.1rem; }
+        .service-grid { grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+        .service-item img { width: 100%; border-radius: 20px; }
+        .bg-light { background-color: var(--bg-light); }
+
+        .production-layout { grid-template-columns: 1.5fr 1fr; gap: 60px; align-items: center; }
+        .production-image img { width: 100%; border-radius: 20px; }
+        .slider-dots { gap: 10px; margin-top: 20px; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; background: #ddd; }
+        .dot.active { background: var(--secondary); }
+
+        .auto-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+        .auto-card { position: relative; border-radius: 20px; overflow: hidden; height: 400px; background: #fff; border: 1px solid var(--border); }
+        .auto-card img { width: 100%; height: 100%; object-fit: cover; }
+        .card-placeholder { padding: 40px; height: 100%; display: flex; align-items: center; justify-content: center; text-align: center; }
+        .overlay-text { position: absolute; bottom: 20px; left: 20px; background: rgba(0,0,0,0.7); color: #fff; padding: 5px 15px; border-radius: 5px; font-size: 0.8rem; }
+
+        /* Community */
+        .community-grid { grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 60px; }
+        .community-item { text-align: center; }
+        .circle-img { width: 150px; height: 150px; background: var(--bg-light); border-radius: 50%; margin: 0 auto 20px; }
+        .community-item h3 { margin-bottom: 15px; }
+        .community-item p { color: var(--text-muted); }
+
+        /* Contact */
+        .contact-layout { grid-template-columns: 1.2fr 1fr; gap: 80px; margin-top: 50px; }
+        .locations-grid { grid-template-columns: 1fr 1fr; gap: 30px; }
+        .location h4 { margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 5px; }
+        .location p { font-size: 0.9rem; color: var(--text-muted); }
+        .contact-form { display: flex; flex-direction: column; gap: 20px; }
+        .contact-form input, .contact-form textarea { padding: 15px; border: 1px solid var(--border); font-family: inherit; font-size: 1rem; }
+        .contact-form button { align-self: flex-start; }
+
+        /* Footer */
+        .footer { padding: 40px 5%; border-top: 1px solid var(--border); background: var(--bg-light); }
+        .footer-info p { margin-top: 10px; color: var(--text-muted); font-size: 0.8rem; }
+        .footer-links { gap: 30px; }
+        .footer-links a { font-size: 0.8rem; color: var(--text-muted); }
+
+        /* Responsive */
+        .menu-toggle { display: none; }
+        
+        @media (max-width: 992px) {
+          .hero, .about, .service-grid, .production-layout, .auto-grid, .contact-layout { grid-template-columns: 1fr; gap: 40px; }
+          .hero-title { font-size: 3rem; }
+          .community-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+          .nav {
+            position: fixed;
+            top: var(--header-height);
+            right: -100%;
+            width: 100%;
+            height: calc(100vh - var(--header-height));
+            background: #fff;
+            transition: var(--transition);
+            flex-direction: column;
+            padding: 40px;
+          }
+          .nav.open { right: 0; }
+          .nav ul { flex-direction: column; gap: 20px; }
+          .menu-toggle { display: block; cursor: pointer; }
+          .menu-toggle span { display: block; width: 25px; height: 2px; background: var(--secondary); margin: 5px 0; transition: var(--transition); }
+          .menu-toggle span.close { transform: rotate(45deg) translate(5px, 5px); }
+        }
+      `}</style>
+    </div>
+  );
+};
+
+export default App;
