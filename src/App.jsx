@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import './index.css';
+import './index.css'; // Vercel build trigger
 import { supabase } from './lib/supabase';
 
 // Components
